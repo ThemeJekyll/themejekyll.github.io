@@ -20,43 +20,28 @@ $(document).ready(function () {
   })
 
   // Get the theme JSON file
-  $.getJSON('https://themejekyll-chromatical.rhcloud.com/', function (returnedThemes) {
+  $.getJSON('/themes.json', function (returnedThemes) {
     var masterThemeList = returnedThemes
 
     // Hide the loader
     $('#loader').hide()
 
     // Compile Handlebars templates
-    Handlebars.registerHelper('gt', function(val1, val2, options) {
-      if (val1 >= val2){
-        return options.fn(this)
-      }
-      return options.inverse(this)
-    })
-
-    Handlebars.registerHelper('lt', function(val1, val2, options) {
-      if (val1 < val2){
-        return options.fn(this)
-      }
-      return options.inverse(this)
-    })
     var themeTemplate = Handlebars.compile($('#themeTemplate').html())
     var themePageTemplate = Handlebars.compile($('#themePageTemplate').html())
     var featureTemplate = Handlebars.compile($('#featureTemplate').html())
     var categoryTemplate = Handlebars.compile($('#categoryTemplate').html())
     var layoutTemplate = Handlebars.compile($('#layoutTemplate').html())
-    var ratingTemplate = Handlebars.compile($('#ratingTemplate').html())
 
     function filterThemes (themes) {
       // Sort the themes
-      var themeList = _.sortBy(themes, function (theme) { return theme.stars[0] }).reverse()
+      var themeList = _.sortBy(themes, function (theme) { return theme.date }).reverse()
 
       // Get the filter values
       var selectedFeatures = []
       var selectedCategories = []
       var selectedLayouts = []
       var selectedTags = _.pluck($('.chips-autocomplete').material_chip('data'), 'tag')
-      var selectedRating = $('#rating .filter:checked').attr('data-rating')
       $('#features :checkbox:checked').each(function (key, checkbox) {
         selectedFeatures.push($(checkbox).attr('data-name'))
       })
@@ -83,9 +68,6 @@ $(document).ready(function () {
       themeList = _.filter(themeList, function (theme) {
         return s.include(String(theme.title).toLowerCase(), $('#searchBox').val().toLowerCase())
       })
-      themeList = _.filter(themeList, function (theme) {
-        return theme.stars[0] >= selectedRating
-      })
 
       // Return the theme list
       return themeList
@@ -101,12 +83,6 @@ $(document).ready(function () {
           break
         case 'name':
           themeList = _.sortBy(themeList, 'title')
-          break
-        case 'rating':
-          themeList = _.sortBy(themeList, function (theme) { return theme.stars[0] }).reverse()
-          break
-        case 'popularity':
-          themeList = _.sortBy(themeList, function (theme) { return theme.stars[6] }).reverse()
           break
         case 'newest':
           themeList = _.sortBy(themeList, 'date').reverse()
@@ -172,7 +148,6 @@ $(document).ready(function () {
     // Clear all set filters
     function clearFilters () {
       $('#searchBox').val('')
-      $('#filters').find('.any-rating').click()
       $('.chips-autocomplete .chip .close').click()
       $('#filters').find(':checkbox:checked').prop('checked', false)
       filterChange()
@@ -342,46 +317,6 @@ $(document).ready(function () {
         }
       }
     })
-
-    // Setup star rating
-    $('#theme-wrapper').on('mouseover', '.rating-star', function () {
-      var hovered = $(this)
-      $(hovered).parent().find('.rating-star').each(function (k, element) {
-        if ($(element).attr('data-rating') <= $(hovered).attr('data-rating')) {
-          $(element).text('star')
-        } else {
-          $(element).text('star_border')
-        }
-      })
-    })
-    $('#theme-wrapper').on('mouseleave', '.rating-star', function () {
-      $('.rating-star').each(function (k, element) {
-        $(element).text($(element).attr('data-original'))
-      })
-    })
-    $('#theme-wrapper').on('click', '.rating-star', function () {
-      $.ajax({
-        url: 'https://themejekyll-chromatical.rhcloud.com/star',
-        data: JSON.stringify({url: $('#ratings').attr('data-url'), stars: $(this).attr('data-rating')}),
-        method: 'POST',
-        contentType: 'application/json',
-        success: function () {
-          updateRatings()
-        },
-        error: function (e) {
-          if (e.status === 403) {
-            $('#ratingError').slideDown().delay(5000).slideUp()
-          }
-        }
-      })
-    })
-
-    function updateRatings () {
-      $.ajax({url: 'https://themejekyll-chromatical.rhcloud.com/stars', data: JSON.stringify({url: $('#ratings').attr('data-url')}), method: 'POST', contentType: 'application/json', success: function (result) {
-        $('#ratings').html(ratingTemplate(JSON.parse(result)))
-        updateTheme($('#ratings').attr('data-url'))
-      }})
-    }
 
     // Create initial filters
     _.uniq(_.flatten(_.pluck(masterThemeList, 'features'))).sort().forEach(function (item) {

@@ -6,38 +6,10 @@
       <div class="theme-actions">
         <div class="theme-text">
           <p class="left theme-title flow-text grey-text text-lighten-3 text-shadow no-margins">{{title}}</p>
-          <div class="right no-margins flow-text grey-text text-lighten-3 no-margins">
-            {{#lt stars.[0] 0.5}}<i class="material-icons amber-text text-lighten-1 star-icon">&#xe83a;</i>{{/lt}}
-            {{#gt stars.[0] 0.5}}<i class="material-icons amber-text text-lighten-1 star-icon">&#xe838;</i>{{/gt}}
-            {{#lt stars.[0] 1.5}}<i class="material-icons amber-text text-lighten-1 star-icon">&#xe83a;</i>{{/lt}}
-            {{#gt stars.[0] 1.5}}<i class="material-icons amber-text text-lighten-1 star-icon">&#xe838;</i>{{/gt}}
-            {{#lt stars.[0] 2.5}}<i class="material-icons amber-text text-lighten-1 star-icon">&#xe83a;</i>{{/lt}}
-            {{#gt stars.[0] 2.5}}<i class="material-icons amber-text text-lighten-1 star-icon">&#xe838;</i>{{/gt}}
-            {{#lt stars.[0] 3.5}}<i class="material-icons amber-text text-lighten-1 star-icon">&#xe83a;</i>{{/lt}}
-            {{#gt stars.[0] 3.5}}<i class="material-icons amber-text text-lighten-1 star-icon">&#xe838;</i>{{/gt}}
-            {{#lt stars.[0] 4.5}}<i class="material-icons amber-text text-lighten-1 star-icon">&#xe83a;</i>{{/lt}}
-            {{#gt stars.[0] 4.5}}<i class="material-icons amber-text text-lighten-1 star-icon">&#xe838;</i>{{/gt}}</div>
         </div>
       </div>
     </div>
   </a>
-</script>
-
-<script id="ratingTemplate" type="text/x-handlebars-template">
-  <div class="center">
-    {{#lt stars.[0] 0.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="1" data-original="star_border">&#xe83a;</i>{{/lt}}
-    {{#gt stars.[0] 0.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="1" data-original="star">&#xe838;</i>{{/gt}}
-    {{#lt stars.[0] 1.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="2" data-original="star_border">&#xe83a;</i>{{/lt}}
-    {{#gt stars.[0] 1.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="2" data-original="star">&#xe838;</i>{{/gt}}
-    {{#lt stars.[0] 2.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="3" data-original="star_border">&#xe83a;</i>{{/lt}}
-    {{#gt stars.[0] 2.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="3" data-original="star">&#xe838;</i>{{/gt}}
-    {{#lt stars.[0] 3.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="4" data-original="star_border">&#xe83a;</i>{{/lt}}
-    {{#gt stars.[0] 3.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="4" data-original="star">&#xe838;</i>{{/gt}}
-    {{#lt stars.[0] 4.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="5" data-original="star_border">&#xe83a;</i>{{/lt}}
-    {{#gt stars.[0] 4.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="5" data-original="star">&#xe838;</i>{{/gt}}
-  </div>
-  <div class="center red-text text-lighten-1 hidden" id="ratingError">You have already rated this theme.</div>
-  <div class="center grey-text text-lighten-1">{{stars.[0]}} Star{{#gt stars.[0] 1.5}}s{{/gt}}, {{stars.[6]}} Rating{{#gt stars.[6] 1.5}}s{{/gt}}</div>
 </script>
 
 <script id="themePageTemplate" type="text/x-handlebars-template">
@@ -75,22 +47,6 @@
         <div class="col s12 m6 l4">
           <div class="card-panel blue-grey-text text-darken-3">
             <div class="center">
-              <div id="ratings" data-url="{{url}}">
-                <div class="center">
-                  {{#lt stars.[0] 0.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="1" data-original="star_border">&#xe83a;</i>{{/lt}}
-                  {{#gt stars.[0] 0.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="1" data-original="star">&#xe838;</i>{{/gt}}
-                  {{#lt stars.[0] 1.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="2" data-original="star_border">&#xe83a;</i>{{/lt}}
-                  {{#gt stars.[0] 1.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="2" data-original="star">&#xe838;</i>{{/gt}}
-                  {{#lt stars.[0] 2.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="3" data-original="star_border">&#xe83a;</i>{{/lt}}
-                  {{#gt stars.[0] 2.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="3" data-original="star">&#xe838;</i>{{/gt}}
-                  {{#lt stars.[0] 3.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="4" data-original="star_border">&#xe83a;</i>{{/lt}}
-                  {{#gt stars.[0] 3.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="4" data-original="star">&#xe838;</i>{{/gt}}
-                  {{#lt stars.[0] 4.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="5" data-original="star_border">&#xe83a;</i>{{/lt}}
-                  {{#gt stars.[0] 4.5}}<i class="material-icons amber-text text-lighten-1 star-icon rating-star" data-rating="5" data-original="star">&#xe838;</i>{{/gt}}
-                </div>
-                <div class="center red-text text-lighten-1 hidden" id="ratingError">You have already rated this theme.</div>
-                <div class="center grey-text text-lighten-1">{{stars.[0]}} Star{{#gt stars.[0] 1.5}}s{{/gt}}, {{stars.[6]}} Rating{{#gt stars.[6] 1.5}}s{{/gt}}</div>
-              </div>
               <p>
                 <a href="{{demo}}" class="red darken-2 waves-effect waves-light btn btn-large" target="_blank">Demo</a> <a href="{{download}}" target="_blank" class="blue darken-2 waves-effect waves-light btn btn-large">Download</a>
               </p>
