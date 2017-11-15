@@ -1,4 +1,4 @@
 ---
 layout: themes
-permalink: /themes/
+title: Themes
 ---

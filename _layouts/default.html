@@ -1,11 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-  {% include head.html %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>{{ page.title }} | {{ site.title }} - {{ site.short_description }}</title>
+    {% include head.html %}
   </head>
-  <body class="grey lighten-4{% if page.layout == 'themes' %} home{% endif %}">
-    {% include navbar.html %}
-    {{ content }}
-    {% include footer.html %}
+  <body>
+    {% include collapse_menu.html %}
+    <div class="pusher">
+      {{ content }}
+      <div class="ui horizontal divider"></div>
+      <div class="ui inverted vertical footer segment">
+        <div class="ui container">
+          <p>Created and curated by James King (<a href="https://github.com/chromatical" target="_blank">@chromatical</a>).</p>
+        </div>
+      </div>
+    </div>
+    {% include scripts.html %}
   </body>
 </html>

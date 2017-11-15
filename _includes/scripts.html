@@ -1,0 +1,199 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js" integrity="sha256-Bhi6GMQ/72uYZcJXCJ2LToOIcN3+Cx47AZnq/Bw1f7A=" crossorigin="anonymous"></script>
+{% if page.layout != 'home' %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.6/js/swiper.min.js"></script>
+<script>
+var screenshots
+$(document).ready(function() {
+  $('.ui.modal').modal({onVisible: function(){$('.ui.modal').modal('refresh'); screenshots.update()}})
+  $('.ui.checkbox').checkbox()
+  screenshots = new Swiper ('.swiper-container', {
+    pagination: {el: '.swiper-pagination'},
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev'
+    }
+  })
+})
+</script>
+{% if page.layout == 'themes' %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.3/vue.min.js" integrity="sha256-nAf3juAvyNkyQ17QrPxyArUX5HVce401EpmGfiFXyvk=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.string/3.3.4/underscore.string.min.js" integrity="sha256-iOkXo5pPeEyOh1IcvZlsNVSh6p+mFfzzHF7rrkyxpes=" crossorigin="anonymous"></script>
+<script>
+var app = new Vue({
+  el: '#app',
+  data: {
+    baseurl: "{{ site.baseurl }}",
+    themes: [
+    {% assign sorted_themes = site.themes | sort: 'title' %}
+      {% for theme in sorted_themes %}
+        {
+          "title": {{ theme.title | jsonify }},
+          "url": {{ theme.path |  replace:'_themes/','' |  replace:'.md','' | jsonify }},
+          "license": {{ theme.license | jsonify}},
+          "licenselink": {{ theme.license_link | jsonify }},
+          "date": {{ theme.date | jsonify }},
+          "featured": {% if theme.featured %}true{% else %}false{% endif %},
+          "github": {{ theme.github | jsonify }},
+          "repository": {{ theme.repository | jsonify }},
+          "gem": {{ theme.gem | jsonify }},
+          "demo": {{ theme.demo | jsonify }},
+          "download": {{ theme.download | jsonify }},
+          "screenshots": [{% for screenshot in theme.screenshots %}{{ screenshot | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor %}],
+          "description": {{ theme.description | jsonify }},
+          "features": {{ theme.features | jsonify }},
+          "categories": {{ theme.categories | jsonify }},
+          "layouts": {{ theme.layouts | jsonify }},
+          "tags": {{ theme.tags | jsonify }},
+          "content": {{ theme.content | jsonify }}
+        } {% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ],
+    load: 20,
+    currentTheme: {},
+    bookmarks: [],
+    sort: 'newest',
+    search: '',
+    selectedFeatures: [],
+    selectedCategories: [],
+    selectedLayouts: [],
+    selectedTags: []
+  },
+  computed: {
+    filteredThemes: function(){
+      var sortProperty = this.sort
+      var searchQuery = this.search.toLowerCase()
+      var featuresQuery = this.selectedFeatures
+      var categoriesQuery = this.selectedCategories
+      var layoutsQuery = this.selectedLayouts
+      var tagsQuery = this.selectedTags
+      var themeList = this.themes
+      // Filter by search text
+      themeList = _.filter(themeList, function(theme){
+        return s.include(theme.title.toLowerCase(), searchQuery)
+      })
+      // Filter by features
+      themeList = _.filter(themeList, function(theme){
+        return _.difference(featuresQuery, theme.features).length === 0
+      })
+      // Filter by categories
+      themeList = _.filter(themeList, function(theme){
+        return _.difference(categoriesQuery, theme.categories).length === 0
+      })
+      // Filter by layouts
+      themeList = _.filter(themeList, function(theme){
+        return _.difference(layoutsQuery, theme.layouts).length === 0
+      })
+      // Filter by tags
+      themeList = _.filter(themeList, function(theme){
+        return _.difference(tagsQuery, theme.tags).length === 0
+      })
+      switch(sortProperty) {
+        case 'newest':
+            themeList = _.sortBy(themeList, 'date').reverse()
+            break
+        case 'oldest':
+            themeList = _.sortBy(themeList, 'date')
+            break
+        case 'name':
+            themeList = _.sortBy(themeList, 'title')
+            break
+        default:
+            themeList = _.sortBy(themeList, 'date').reverse()
+      }
+
+      return themeList
+    },
+    allUniqueFeatures: function(){
+      return _.uniq(_.flatten(_.pluck(this.themes, 'features')))
+    },
+    filteredUniqueFeatures: function(){
+      return _.uniq(_.flatten(_.pluck(this.filteredThemes, 'features')))
+    },
+    allUniqueCategories: function(){
+      return _.uniq(_.flatten(_.pluck(this.themes, 'categories')))
+    },
+    filteredUniqueCategories: function(){
+      return _.uniq(_.flatten(_.pluck(this.filteredThemes, 'categories')))
+    },
+    allUniqueLayouts: function(){
+      return _.uniq(_.flatten(_.pluck(this.themes, 'layouts')))
+    },
+    filteredUniqueLayouts: function(){
+      return _.uniq(_.flatten(_.pluck(this.filteredThemes, 'layouts')))
+    },
+    allUniqueTags: function(){
+      return _.uniq(_.flatten(_.pluck(this.themes, 'tags')))
+    },
+    filteredUniqueTags: function(){
+      return _.uniq(_.flatten(_.pluck(this.filteredThemes, 'tags')))
+    }
+  },
+  methods: {
+    clear: function () {
+      this.search = ''
+      this.selectedFeatures = []
+      this.selectedCategories = []
+      this.selectedLayouts = []
+      $('#tag-selector').dropdown('clear')
+    },
+    toggleBookmark: function(theme){
+      if (_.contains(this.bookmarks, theme.url)){
+        this.bookmarks = _.without(this.bookmarks, theme.url)
+      }
+      else{
+        this.bookmarks.push(theme.url)
+      }
+    }
+  },
+  watch: {
+    bookmarks: function () {
+      try{
+        localStorage.setItem('bookmarks', JSON.stringify(this.bookmarks))
+      }
+      catch (e){
+
+      }
+    }
+  }
+
+})
+
+try{
+  if (localStorage.getItem('bookmarks')) {
+    JSON.parse(localStorage.getItem('bookmarks')).forEach(function(bookmark){
+      if (typeof bookmark === 'string'){
+        app.bookmarks.push(bookmark)
+      }
+    })
+  }
+}
+catch (e){
+}
+
+$('.ui.sticky').sticky({context: '#themes-wrapper'})
+$('#filters').sidebar('attach events', '#filters-button')
+$('#bookmarks').sidebar('attach events', '#bookmarks-button')
+$('select.dropdown').dropdown()
+</script>
+{% endif %}
+{% endif %}
+<script>
+$('#pull-menu').sidebar('attach events', '.toc.item')
+</script>
+<!-- Piwik -->
+<script>
+  var _paq = _paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//piwik.chromaticaldesign.com/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', '8']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Piwik Code -->

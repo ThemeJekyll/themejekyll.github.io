@@ -2,44 +2,167 @@
 layout: default
 ---
 
-<main id="home-wrapper">
-  <div id="themeView"></div>
-  <div class="center left load-more">
-    <a class="waves-effect waves-light btn-large" id="showMore">Load More</a>
+<div class="ui vertical inverted segment">
+  <div class="ui container">
+    {% include menu.html %}
   </div>
-  <div id="theme-wrapper" class="animated fadeIn hidden">
-  </div>
-</main>
-<div id="messages">
-  <div id="loader" class="animated fadeIn center jsonly">
-    <div class="preloader-wrapper big active">
-      <div class="spinner-layer spinner-blue-only">
-        <div class="circle-clipper left">
-          <div class="circle"></div>
-        </div><div class="gap-patch">
-          <div class="circle"></div>
-        </div><div class="circle-clipper right">
-          <div class="circle"></div>
+</div>
+<br><br>
+{% raw %}
+<div id="app">
+  <div class="ui sidebar inverted vertical menu" id="filters">
+    <div class="ui inverted segment">
+      <button class="ui inverted right labeled icon button" v-on:click="clear">
+        <i class="undo icon"></i>
+        Clear Filters
+      </button>
+    </div>
+    <div class="ui inverted segment">
+      <div class="ui search">
+        <div class="ui icon input">
+          <input class="prompt" placeholder="Search by name..." type="text" v-model="search">
+          <i class="search icon"></i>
+        </div>
+      </div>
+    </div>
+    <div class="ui inverted segment">
+      <div class="ui inverted form">
+        <div class="field">
+          <label>Sort By</label>
+          <select name="sort" class="ui dropdown" v-model="sort">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="name">Name</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="ui inverted segment">
+      <div class="ui inverted form">
+        <h4>Features</h4>
+        <div class="inline field" v-for="feature in allUniqueFeatures">
+          <div class="ui checkbox">
+            <input class="hidden" type="checkbox" v-bind:value="feature" v-bind:disabled="! _.contains(filteredUniqueFeatures, feature)" v-model="selectedFeatures">
+            <label>{{ feature }}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui inverted segment">
+      <div class="ui inverted form">
+        <h4>Categories</h4>
+        <div class="inline field" v-for="category in allUniqueCategories">
+          <div class="ui checkbox">
+            <input class="hidden" type="checkbox" v-bind:value="category" v-bind:disabled="! _.contains(filteredUniqueCategories, category)" v-model="selectedCategories">
+            <label>{{ category }}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui inverted segment">
+      <div class="ui inverted form">
+        <h4>Layouts</h4>
+        <div class="inline field" v-for="layout in allUniqueLayouts">
+          <div class="ui checkbox">
+            <input class="hidden" type="checkbox" v-bind:value="layout" v-bind:disabled="! _.contains(filteredUniqueLayouts, layout)" v-model="selectedLayouts">
+            <label>{{ layout }}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui inverted segment">
+      <div class="ui inverted form">
+        <h4>Tags</h4>
+        <div class="inline field">
+          <select class="ui fluid search dropdown" multiple="" v-model="selectedTags" id="tag-selector">
+            <option value="">Select tags...</option>
+            <option v-bind:value="tag" v-for="tag in allUniqueTags">{{ tag }}</option>
+          </select>
         </div>
       </div>
     </div>
   </div>
-
-  <div class="center-align hidden animated fadeIn grey-text" id="noThemesFound">
-    <i class="material-icons large">search</i>
-    <div class="flow-text">No Themes Found</div>
-  </div>
-
-  <noscript>
-    <div class="center-align grey-text">
-      <i class="material-icons large">warning</i>
-      <div class="flow-text">JavaScript Required</div>
-      <div>Please enable JavaScript or use the <a href="{{ site.baseurl }}/noscript">no script version</a>.</div>
+  <div class="ui right sidebar inverted vertical menu" id="bookmarks">
+    <div class="ui center aligned inverted segment" v-if="bookmarks.length === 0">
+      <i class="massive bookmark icon"></i>
+      <h4>No Bookmarks</h4>
     </div>
-  </noscript>
-  <div class="center-align grey-text animated fadeIn hidden" id="loadFailed">
-    <i class="material-icons large">warning</i>
-    <p class="flow-text">Loading Failed</p>
-    <div>Something went wrong.  Please reload this page or use the <a href="{{ site.baseurl }}/noscript">no script version</a>.</div>
+    <div class="ui center aligned inverted segment" v-if="bookmarks.length > 0">
+      <a class="ui card" v-bind:href="baseurl+'/theme/'+theme" v-for="theme in themes" v-if="_.contains(bookmarks, theme.url)" v-on:click.prevent="currentTheme = theme; screenshots.slideTo(0, 1); screenshots.update(); $('.ui.modal').modal('show');">
+        <div class="image">
+          <img v-bind:src="baseurl+'/assets/screenshots/'+theme.url+'/thumbnail.jpg'">
+        </div>
+        <div class="content">
+          <div class="header">{{ theme.title }}</div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div id="themes-wrapper">
+    <button class="ui big black right attached fixed floating icon button" id="filters-button" data-tooltip="Filters" data-position="right center">
+      <i class="filter icon"></i>
+    </button>
+    <button class="ui big blue left attached fixed floating icon button" id="bookmarks-button" data-tooltip="Bookmarks" data-position="left center">
+      <i class="bookmark icon"></i>
+    </button>
+    <div class="ui center aligned container">
+      <div class="ui two stackable cards">
+        <a class="ui card" v-bind:href="baseurl+'/theme/'+theme.url" v-for="(theme, index) in filteredThemes" v-if="index < load" v-on:click.prevent="currentTheme = theme; screenshots.slideTo(0, 1); screenshots.update(); $('.ui.modal').modal('show');">
+          <div class="image">
+            <img v-bind:src="baseurl+'/assets/screenshots/'+theme.url+'/thumbnail.jpg'">
+          </div>
+          <div class="content">
+            <div class="header">{{ theme.title }}</div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <br><br>
+    <div class="ui center aligned container" v-if="load < filteredThemes.length">
+      <button v-on:click="load += 20" class="positive massive ui button">Load More</button>
+    </div>
+    <br><br>
+    <div class="ui modal">
+      <i class="close icon"></i>
+      <div class="header" v-if="currentTheme.title">
+        {{ currentTheme.title }}
+      </div>
+      <div class="header" v-else>
+        No title
+      </div>
+      <div class="ui image content">
+        <div class="swiper-container">
+          <div class="swiper-wrapper">
+              <div class="swiper-slide" v-for="screenshot in currentTheme.screenshots" v-if="currentTheme.screenshots"><img v-bind:src="baseurl+'/assets/screenshots/'+currentTheme.url+'/'+screenshot"></div>
+              <div class="swiper-slide" v-if="!currentTheme.screenshots"><img v-bind:src="baseurl+'/assets/img/dummy.png'"></div>
+          </div>
+          <div class="swiper-pagination"></div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="ui header" v-if="currentTheme.description">{{ currentTheme.description }}</div>
+        <div class="ui header" v-else>No description</div>
+      </div>
+      <div class="actions">
+        <div class="ui icon button" v-on:click="toggleBookmark(currentTheme)" data-tooltip="Bookmark">
+          <i v-bind:class="{ red: _.contains(bookmarks, currentTheme.url) }" class="bookmark icon"></i>
+        </div>
+        <a v-bind:href="currentTheme.demo" target="_blank" class="ui red icon button" data-tooltip="Live Demo">
+          <i class="eye icon"></i>
+        </a>
+        <a v-bind:href="currentTheme.download" target="_blank" class="ui blue icon button" data-tooltip="Download">
+          <i class="download icon"></i>
+        </a>
+        <a v-bind:href="'https://github.com/'+currentTheme.github+'/'+currentTheme.repository" target="_blank" class="ui black icon button" data-tooltip="GitHub Repo">
+          <i class="github icon"></i>
+        </a>
+        <a v-bind:href="baseurl+'/theme/'+currentTheme.url" class="ui green icon button" data-tooltip="More Info">
+          <i class="right chevron icon"></i>
+        </a>
+      </div>
+    </div>
   </div>
 </div>
+{% endraw %}

@@ -11,7 +11,7 @@ download: https://github.com/hemangsk/Gravity/archive/master.zip
 screenshots:
   - gravity-screenshot-1.jpg
   - gravity-screenshot-2.jpg
-description: Minimal is the new cool. 
+description: Minimal is the new cool.
 features:
   - Responsive
   - Social Links
@@ -23,4 +23,4 @@ tags:
   - minimalist
 ---
 
-Captain’s log is a minimalistic & responsive theme for Jekyll. It has several color scheme options and is em/rem based, so it's should be easy to customize it to your own taste!
+Minimal, Content Based, Liberal Jekyll theme for sharing your awesome ideas.

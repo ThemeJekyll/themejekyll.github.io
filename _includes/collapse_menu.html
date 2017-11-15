@@ -1,0 +1,8 @@
+<div class="ui vertical inverted sidebar menu" id="pull-menu">
+  <b class="item">ThemeJekyll</b>
+  {% for item in site.pages %}
+    {% if item.url != "/404/" %}
+      <a href="{{ site.baseurl }}{{ item.url }}" class="{% if item.url == page.url %}active {% endif %}item">{{ item.title }}</a>
+    {% endif %}
+  {% endfor %}
+</div>

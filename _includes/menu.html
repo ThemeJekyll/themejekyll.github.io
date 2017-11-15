@@ -1,0 +1,14 @@
+<div class="ui inverted large secondary pointing menu">
+  <a class="toc item">
+    <i class="sidebar icon"></i> ThemeJekyll
+  </a>
+  <div class="header item">ThemeJekyll</div>
+  {% for item in site.pages %}
+    {% if item.url != "/404/" %}
+      <a href="{{ site.baseurl }}{{ item.url }}" class="{% if item.url == page.url %}active {% endif %}item">{{ item.title }}</a>
+    {% endif %}
+  {% endfor %}
+  <div class="right item">
+    <a href="https://github.com/ThemeJekyll/themejekyll.github.io" target="_blank" class="ui inverted button">Add Your Theme</a>
+  </div>
+</div>

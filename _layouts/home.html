@@ -1,0 +1,38 @@
+---
+layout: default
+---
+<div class="ui inverted vertical masthead center aligned segment">
+  <div class="ui container">
+    {% include menu.html %}
+  </div>
+
+  <div class="ui text container">
+    <h1 class="ui inverted header">
+      Jekyll Themes Gallery
+    </h1>
+    <h2>Find the perfect theme for your next Jekyll project.</h2>
+    <a href="{{ site.baseurl }}/themes/" class="ui huge primary button">Explore Themes <i class="right arrow icon"></i></a>
+  </div>
+</div>
+
+<div class="ui vertical stripe segment">
+  <div class="ui center aligned container">
+    <h3 class="centered text">Recently Added Themes</h3>
+    <br><br>
+    <div class="ui three stackable cards">
+      {% assign recent = site.themes | sort: 'date' | reverse %}
+      {% for theme in recent %}
+        {% if forloop.index < 4%}
+          <a class="ui card" href="{{ site.baseurl }}{{ theme.url }}">
+            <div class="image">
+              <img src="{{ site.baseurl }}/assets/screenshots/{{ theme.path |  replace:'_themes/','' |  replace:'.md','' }}/thumbnail.jpg">
+            </div>
+            <div class="content">
+              <div class="header">{{ theme.title }}</div>
+            </div>
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>

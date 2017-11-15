@@ -1,76 +1,69 @@
 ---
 layout: default
 ---
-<main>
-  <div id="theme-wrapper">
-    <div id="theme-page-wrapper">
-      <div class="navbar-fixed" id="theme-nav">
-        <nav class="blue-grey darken-3">
-          <div class="nav-wrapper">
-            <ul>
-              <li><a id="back-to-themes" href="{{ site.baseurl }}/themes"><i class="material-icons">&#xe5cb;</i></a></li>
-            </ul>
-            <h2 class="center brand-logo no-margins"><span class="flow-text">{{ page.title }}</span></h2>
-          </div>
-        </nav>
+{% include collapse_menu.html %}
+<div class="pusher">
+  <div class="ui vertical inverted segment">
+    <div class="ui container">
+      {% include menu.html %}
+    </div>
+  </div>
+  <br><br>
+  <div class="ui container">
+    <div class="ui segment">
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          {% for screenshot in page.screenshots %}
+            <div class="swiper-slide"><img src="{{ site.baseurl }}/assets/screenshots/{{ page.path |  replace:'_themes/','' |  replace:'.md','' }}/{{ screenshot }}"></div>
+          {% endfor %}
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
       </div>
-      <div class="container">
-        <div class="row">
-          <div class="col s12">
-            <div class="swiper-container">
-              <div class="swiper-wrapper">
-                {% for screenshot in page.screenshots %}
-                  <div class="swiper-slide">
-                    <img src="{{ site.baseurl }}/assets/screenshots/{{ page.url | replace:'/theme/','' }}{{ screenshot }}" alt="{{ page.title }} Jekyll Theme Screenshot">
-                  </div>
-                {% endfor %}
-              </div>
-              <div class="swiper-pagination swiper-control"></div>
-              <div class="swiper-button-prev swiper-control"></div>
-              <div class="swiper-button-next swiper-control"></div>
-            </div>
+    </div>
+    <div class="ui horizontal divider"></div>
+    <div class="ui stackable grid">
+      <div class="ten wide column">
+        <h1>{{ page.title }}</h1>
+        <h2 class="ui header small">{{ page.description }}</h2>
+        <p>{{ content }}</p>
+      </div>
+      <div class="six wide column">
+        <div class="ui segment">
+          <div class="ui center aligned container">
+            <a href="{{ page.demo }}" target="_blank" class="ui red right labeled icon button">Demo <i class="eye icon"></i></a>
+            <a href="{{ page.download }}" target="_blank" class="ui blue right labeled icon button">Download <i class="download icon"></i></a>
+            <br><br>
+            <a href="https://github.com/{{ page.github }}/{{ page.repository }}" target="_blank">GitHub Repo</a>
           </div>
-          <div class="col s12 m6 l8">
-            <p class="flow-text">{{ page.description }}</p>
-            <p>{{ content }}</p>
-          </div>
-          <div class="col s12 m6 l4">
-            <div class="card-panel blue-grey-text text-darken-3">
-              <div class="center">
-                <p>
-                  <a href="{{ page.demo }}" class="red darken-2 waves-effect waves-light btn btn-large" target="_blank">Demo</a> <a href="{{ page.download }}" target="_blank" class="blue darken-2 waves-effect waves-light btn btn-large">Download</a>
-                </p>
-                <p>
-                  <a href="https://github.com/{{ page.github }}/{{ page.repository }}" class="blue-grey-text text-darken-3" target="_blank">Github Repository</a>
-                </p>
-              </div>
+          <div class="ui container">
+            <p>
+              <b>Author</b>: <a href="https://github.com/{{ page.github }}" target="_blank">{{ page.github }}</a>
+            </p>
+            <p>
+              <b>License</b>: <a href="{{ page.license_link }}" target="_blank">{{ page.license }}</a>
+            </p>
+            {% if page.gem %}
               <p>
-                <b>Author</b>: <a href="https://github.com/{{ page.github }}" class="blue-grey-text text-darken-3" target="_blank">{{ page.github }}</a>
+                <b>Gem</b>: <a href="https://rubygems.org/gems/{{ page.gem }}" target="_blank">gem install {{ page.gem }}</a>
               </p>
-              <p>
-                <b>License</b>: <a href="{{ page.license_link }}" class="blue-grey-text text-darken-3" target="_blank">{{ page.license }}</a>
-              </p>
-              {% if page.gem %}
-                <p>
-                  <b>Gem</b>: <a href="https://rubygems.org/gems/{{ page.gem }}" class="blue-grey-text text-darken-3" target="_blank">gem install {{ page.gem }}</a>
-                </p>
-              {% endif %}
-              <p>
-                <b>Categories</b>: {% for category in page.categories %}{{ category }}{% unless forloop.last %}, {% endunless %}{% endfor %}
-              </p>
-              <p>
-                <b>Layouts</b>: {% for layout in page.layouts %}{{ layout }}{% unless forloop.last %}, {% endunless %}{% endfor %}
-              </p>
-              <p>
-                <b>Features</b>: {% for feature in page.features %}{{ feature }}{% unless forloop.last %}, {% endunless %}{% endfor %}
-              </p>
-              <p>
-                <b>Tags</b>: {% for tag in page.tags %}{{ tag }}{% unless forloop.last %}, {% endunless %}{% endfor %}
-              </p>
-            </div>
+            {% endif %}
+            <p>
+              <b>Categories</b>: {% for category in page.categories %}{{ category }}{% unless forloop.last %}, {% endunless %}{% endfor %}
+            </p>
+            <p>
+              <b>Layouts</b>: {% for layout in page.layouts %}{{ layout }}{% unless forloop.last %}, {% endunless %}{% endfor %}
+            </p>
+            <p>
+              <b>Features</b>: {% for feature in page.features %}{{ feature }}{% unless forloop.last %}, {% endunless %}{% endfor %}
+            </p>
+            <p>
+              <b>Tags</b>: {% for tag in page.tags %}{{ tag }}{% unless forloop.last %}, {% endunless %}{% endfor %}
+            </p>
           </div>
         </div>
       </div>
     </div>
   </div>
-</main>
+</div>
