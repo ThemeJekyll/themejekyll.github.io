@@ -20,7 +20,7 @@ layout: default
     <div class="ui inverted segment">
       <div class="ui search">
         <div class="ui icon input">
-          <input class="prompt" placeholder="Search by name..." type="text" v-model="search">
+          <input class="prompt" placeholder="Search by name..." type="text" v-model="search" aria-label="Search by name">
           <i class="search icon"></i>
         </div>
       </div>
@@ -29,7 +29,7 @@ layout: default
       <div class="ui inverted form">
         <div class="field">
           <label>Sort By</label>
-          <select name="sort" class="ui dropdown" v-model="sort">
+          <select name="sort" class="ui dropdown" v-model="sort" aria-label="Sort by">
             <option value="newest">Newest First</option>
             <option value="oldest">Oldest First</option>
             <option value="name">Name</option>
@@ -42,7 +42,7 @@ layout: default
         <h4>Features</h4>
         <div class="inline field" v-for="feature in allUniqueFeatures">
           <div class="ui checkbox">
-            <input class="hidden" type="checkbox" v-bind:value="feature" v-bind:disabled="! _.contains(filteredUniqueFeatures, feature)" v-model="selectedFeatures">
+            <input class="hidden" type="checkbox" v-bind:value="feature" v-bind:aria-label="feature" v-bind:disabled="! _.contains(filteredUniqueFeatures, feature)" v-model="selectedFeatures">
             <label>{{ feature }}</label>
           </div>
         </div>
@@ -53,7 +53,7 @@ layout: default
         <h4>Categories</h4>
         <div class="inline field" v-for="category in allUniqueCategories">
           <div class="ui checkbox">
-            <input class="hidden" type="checkbox" v-bind:value="category" v-bind:disabled="! _.contains(filteredUniqueCategories, category)" v-model="selectedCategories">
+            <input class="hidden" type="checkbox" v-bind:value="category" v-bind:aria-label="category" v-bind:disabled="! _.contains(filteredUniqueCategories, category)" v-model="selectedCategories">
             <label>{{ category }}</label>
           </div>
         </div>
@@ -64,7 +64,7 @@ layout: default
         <h4>Layouts</h4>
         <div class="inline field" v-for="layout in allUniqueLayouts">
           <div class="ui checkbox">
-            <input class="hidden" type="checkbox" v-bind:value="layout" v-bind:disabled="! _.contains(filteredUniqueLayouts, layout)" v-model="selectedLayouts">
+            <input class="hidden" type="checkbox" v-bind:value="layout" v-bind:aria-label="layout" v-bind:disabled="! _.contains(filteredUniqueLayouts, layout)" v-model="selectedLayouts">
             <label>{{ layout }}</label>
           </div>
         </div>
@@ -90,7 +90,7 @@ layout: default
     <div class="ui center aligned inverted segment" v-if="bookmarks.length > 0">
       <a class="ui card" v-bind:href="baseurl+'/theme/'+theme" v-for="theme in themes" v-if="_.contains(bookmarks, theme.url)" v-on:click.prevent="currentTheme = theme; screenshots.slideTo(0, 1); screenshots.update(); $('.ui.modal').modal('show');">
         <div class="image">
-          <img v-bind:src="baseurl+'/assets/screenshots/'+theme.url+'/thumbnail.jpg'">
+          <img v-bind:src="baseurl+'/assets/screenshots/'+theme.url+'/thumbnail.jpg'" v-bind:alt="theme.title+' screenshot'">
         </div>
         <div class="content">
           <div class="header">{{ theme.title }}</div>
@@ -107,9 +107,9 @@ layout: default
     </button>
     <div class="ui center aligned container">
       <div class="ui two stackable cards">
-        <a class="ui card" v-bind:href="baseurl+'/theme/'+theme.url" v-for="(theme, index) in filteredThemes" v-if="index < load" v-on:click.prevent="currentTheme = theme; screenshots.slideTo(0, 1); screenshots.update(); $('.ui.modal').modal('show');">
+        <a class="ui card" v-bind:href="baseurl+'/theme/'+theme.url" v-for="(theme, index) in filteredThemes" v-if="index < load" v-on:click.prevent="currentTheme = theme; screenshots.slideTo(0, 1); screenshots.update(); $('.ui.modal').modal('show');" v-bind:aria-label="theme.title">
           <div class="image">
-            <img v-bind:src="baseurl+'/assets/screenshots/'+theme.url+'/thumbnail.jpg'">
+            <img v-bind:src="baseurl+'/assets/screenshots/'+theme.url+'/thumbnail.jpg'" v-bind:alt="theme.title+' screenshot'">
           </div>
           <div class="content">
             <div class="header">{{ theme.title }}</div>
@@ -133,8 +133,8 @@ layout: default
       <div class="ui image content">
         <div class="swiper-container">
           <div class="swiper-wrapper">
-              <div class="swiper-slide" v-for="screenshot in currentTheme.screenshots" v-if="currentTheme.screenshots"><img v-bind:src="baseurl+'/assets/screenshots/'+currentTheme.url+'/'+screenshot"></div>
-              <div class="swiper-slide" v-if="!currentTheme.screenshots"><img v-bind:src="baseurl+'/assets/img/dummy.png'"></div>
+              <div class="swiper-slide" v-for="screenshot in currentTheme.screenshots" v-if="currentTheme.screenshots"><img v-bind:src="baseurl+'/assets/screenshots/'+currentTheme.url+'/'+screenshot" v-bind:alt="currentTheme.name+' screenshot'"></div>
+              <div class="swiper-slide" v-if="!currentTheme.screenshots"><img v-bind:src="baseurl+'/assets/img/dummy.png'" alt="" aria-hidden="true"></div>
           </div>
           <div class="swiper-pagination"></div>
           <div class="swiper-button-prev"></div>
@@ -146,20 +146,20 @@ layout: default
         <div class="ui header" v-else>No description</div>
       </div>
       <div class="actions">
-        <div class="ui icon button" v-on:click="toggleBookmark(currentTheme)" data-tooltip="Bookmark">
-          <i v-bind:class="{ red: _.contains(bookmarks, currentTheme.url) }" class="bookmark icon"></i>
+        <div class="ui icon button" v-on:click="toggleBookmark(currentTheme)" data-tooltip="Bookmark" aria-label="Bookmark" role="button" tabindex="0">
+          <i v-bind:class="{ red: _.contains(bookmarks, currentTheme.url) }" class="bookmark icon" aria-hidden="true"></i>
         </div>
-        <a v-bind:href="currentTheme.demo" target="_blank" class="ui red icon button" data-tooltip="Live Demo">
-          <i class="eye icon"></i>
+        <a v-bind:href="currentTheme.demo" target="_blank" class="ui red icon button" data-tooltip="Live Demo" aria-label="Live Demo" role="button">
+          <i class="eye icon" aria-hidden="true"></i>
         </a>
-        <a v-bind:href="currentTheme.download" target="_blank" class="ui blue icon button" data-tooltip="Download">
-          <i class="download icon"></i>
+        <a v-bind:href="currentTheme.download" target="_blank" class="ui blue icon button" data-tooltip="Download" aria-label="Download" role="button">
+          <i class="download icon" aria-hidden="true"></i>
         </a>
-        <a v-bind:href="'https://github.com/'+currentTheme.github+'/'+currentTheme.repository" target="_blank" class="ui black icon button" data-tooltip="GitHub Repo">
-          <i class="github icon"></i>
+        <a v-bind:href="'https://github.com/'+currentTheme.github+'/'+currentTheme.repository" target="_blank" class="ui black icon button" data-tooltip="GitHub Repo" aria-label="GitHub Repo" role="button">
+          <i class="github icon" aria-hidden="true"></i>
         </a>
-        <a v-bind:href="baseurl+'/theme/'+currentTheme.url" class="ui green icon button" data-tooltip="More Info">
-          <i class="right chevron icon"></i>
+        <a v-bind:href="baseurl+'/theme/'+currentTheme.url" class="ui green icon button" data-tooltip="More Info" aria-label="More Info" role="button">
+          <i class="right chevron icon" aria-hidden="true"></i>
         </a>
       </div>
     </div>

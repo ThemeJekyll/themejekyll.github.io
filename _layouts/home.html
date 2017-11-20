@@ -23,9 +23,9 @@ layout: default
       {% assign recent = site.themes | sort: 'date' | reverse %}
       {% for theme in recent %}
         {% if forloop.index < 4%}
-          <a class="ui card" href="{{ site.baseurl }}{{ theme.url }}">
+          <a class="ui card" href="{{ site.baseurl }}{{ theme.url }}" aria-label="{{ theme.title }}">
             <div class="image">
-              <img src="{{ site.baseurl }}/assets/screenshots/{{ theme.path |  replace:'_themes/','' |  replace:'.md','' }}/thumbnail.jpg">
+              <img src="{{ site.baseurl }}/assets/screenshots/{{ theme.path |  replace:'_themes/','' |  replace:'.md','' }}/thumbnail.jpg" alt="{{ theme.title }} screenshot">
             </div>
             <div class="content">
               <div class="header">{{ theme.title }}</div>
