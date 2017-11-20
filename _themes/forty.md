@@ -18,7 +18,7 @@ features:
   - Responsive
   - Social Links
   - Contact Form
-  - Collapsable Menus
+  - Collapsed Menu
 categories:
   - Blog
   - Photography

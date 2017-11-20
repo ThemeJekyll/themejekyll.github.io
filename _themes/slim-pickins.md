@@ -17,7 +17,7 @@ features:
   - Responsive
   - Social Links
   - SEO
-  - Collapsable Menus
+  - Multilevel Menu
 categories:
   - Blog
   - Business

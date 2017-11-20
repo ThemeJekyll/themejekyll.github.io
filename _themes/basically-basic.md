@@ -18,7 +18,7 @@ description: Your new Jekyll default theme
 features:
   - Responsive
   - Social Links
-  - Collapsable Menus
+  - Collapsed Menu
   - Comments
   - Analytics
   - SEO

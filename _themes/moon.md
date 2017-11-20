@@ -17,7 +17,7 @@ features:
   - Responsive
   - Social Links
   - Comments
-  - Collapsable Menus
+  - Collapsed Menu
 categories:
   - Blog
   - Portfolio

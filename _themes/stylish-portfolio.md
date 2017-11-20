@@ -17,7 +17,7 @@ description: A Jekyll implementation of the Stylish Portfolio template by Start 
 features:
   - Responsive
   - Social Links
-  - Collapsable Menus
+  - Collapsed Menu
   - Gallery
   - Maps
 categories:
