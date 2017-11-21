@@ -61,6 +61,9 @@ layout: default
             <p>
               <b>Tags</b>: {% for tag in page.tags %}{{ tag }}{% unless forloop.last %}, {% endunless %}{% endfor %}
             </p>
+            <p>
+              <a href="https://github.com/ThemeJekyll/themejekyll.github.io/tree/master/{{ page.path }}" target="_blank" class="ui right labeled icon button" data-tooltip="Edit on GitHub">Edit <i class="pencil icon"></i></a>
+            </p>
           </div>
         </div>
       </div>
